@@ -39,7 +39,7 @@ public class UserService {
         return this.userRepository.save( newUser );
     }
 
-    public void delete( Long userId )
+    public void deleteUser( Long userId )
     {
         getById( userId );
         try

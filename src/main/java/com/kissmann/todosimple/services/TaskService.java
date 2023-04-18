@@ -26,7 +26,7 @@ public class TaskService {
     }
 
     @Transactional
-    public Task create( Task task ) {
+    public Task createTask( Task task ) {
         User user = this.userService.getById( task.getUser().getId() );
         task.setId( (Long) null );
         task.setUser( user );
@@ -34,13 +34,13 @@ public class TaskService {
     }
 
     @Transactional
-    public Task update( Task task ) {
+    public Task updateTask( Task task ) {
         Task newTask = getById( task.getId() );
         newTask.setDescription( task.getDescription() );
         return this.taskRepository.save( newTask );
     }
 
-    public void delete( Long id ) {
+    public void deleteTask( Long id ) {
         getById( id );
         try
         {
