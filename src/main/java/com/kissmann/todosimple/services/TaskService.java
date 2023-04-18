@@ -50,4 +50,5 @@ public class TaskService {
         {
             throw new RuntimeException( "Não é possível excluir pois há tarefas relacionadas" );
         }
+    }
 }
