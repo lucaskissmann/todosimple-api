@@ -1,7 +1,6 @@
 package com.kissmann.todosimple.services;
 
 import java.util.Optional;
-import java.lang.RuntimeException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kissmann.todosimple.models.User;
 import com.kissmann.todosimple.repositories.UserRepository;
+import com.kissmann.todosimple.services.exceptions.DataBindingViolationException;
+import com.kissmann.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class UserService {
@@ -20,7 +21,7 @@ public class UserService {
     {
         Optional<User> user = this.userRepository.findById( userId );
         
-        return user.orElseThrow( () -> new RuntimeException( "User not found for id " +userId ));
+        return user.orElseThrow( () -> new ObjectNotFoundException( "User not found for id " +userId ));
     }
 
     @Transactional
@@ -48,7 +49,7 @@ public class UserService {
         }
         catch( Exception e )
         {
-            throw new RuntimeException( "Não é possível excluir pois há tarefas relacionadas" );
+            throw new DataBindingViolationException( "Não é possível excluir pois há tarefas relacionadas" );
         }
 
     }

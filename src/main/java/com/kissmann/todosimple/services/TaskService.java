@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kissmann.todosimple.models.Task;
 import com.kissmann.todosimple.models.User;
 import com.kissmann.todosimple.repositories.TaskRepository;
+import com.kissmann.todosimple.services.exceptions.DataBindingViolationException;
+import com.kissmann.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class TaskService {
@@ -23,7 +25,7 @@ public class TaskService {
     public Task getById( Long id ) {
         Optional<Task> task = this.taskRepository.findById( id );
 
-        return task.orElseThrow( () -> new RuntimeException(" Task not found for id " + id ));
+        return task.orElseThrow( () -> new ObjectNotFoundException(" Task not found for id " + id ));
     }
 
     public List<Task> getAllByUserId( Long userId ) {
@@ -55,7 +57,7 @@ public class TaskService {
         }
         catch( Exception e )
         {
-            throw new RuntimeException( "Não é possível excluir pois há tarefas relacionadas" );
+            throw new DataBindingViolationException( "Não é possível excluir pois há tarefas relacionadas" );
         }
     }
 }
