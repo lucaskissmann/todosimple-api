@@ -1,12 +1,16 @@
 package com.kissmann.todosimple.services;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kissmann.todosimple.models.User;
+import com.kissmann.todosimple.models.enums.ProfileEnum;
 import com.kissmann.todosimple.repositories.UserRepository;
 import com.kissmann.todosimple.services.exceptions.DataBindingViolationException;
 import com.kissmann.todosimple.services.exceptions.ObjectNotFoundException;
@@ -16,6 +20,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bcryptPasswordEncoder;
 
     public User getById( Long userId ) 
     {
@@ -28,6 +35,8 @@ public class UserService {
     public User createUser( User user )
     {
         user.setId( null );
+        user.setPassword( this.bcryptPasswordEncoder.encode( user.getPassword() ));
+        user.setProfiles(Stream.of( ProfileEnum.USER.getCode() ).collect( Collectors.toSet() ));
         user = this.userRepository.save( user );
         return user;
     }    
@@ -37,6 +46,7 @@ public class UserService {
     {
         User newUser = getById( user.getId() );
         newUser.setPassword( user.getPassword());
+        newUser.setPassword( this.bcryptPasswordEncoder.encode( user.getPassword() ));
         return this.userRepository.save( newUser );
     }
 
