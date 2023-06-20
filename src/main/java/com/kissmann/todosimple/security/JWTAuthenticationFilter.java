@@ -24,20 +24,21 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private JWTUtil jwtUtil;
 
-    public JWTAuthenticationFilter( AuthenticationManager authenticationManager, JWTUtil jwtUtil ) {
-        setAuthenticationFailureHandler( new GlobalExceptionHandler() );
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) 
+    {
+        setAuthenticationFailureHandler(new GlobalExceptionHandler());
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
 
     @Override
-    public Authentication attemptAuthentication( HttpServletRequest request, HttpServletResponse response ) throws AuthenticationException {
+    public Authentication attemptAuthentication( HttpServletRequest request, HttpServletResponse response ) throws AuthenticationException 
+    {
         try
         {
             User userCredentials = new ObjectMapper().readValue(request.getInputStream(), User.class);
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userCredentials.getUsername(), userCredentials.getPassword(), new ArrayList<>());
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken( userCredentials.getUsername(), userCredentials.getPassword(), new ArrayList<>() );
 
             Authentication authentication = this.authenticationManager.authenticate( authToken );
 
@@ -49,17 +50,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
-    protected void successfulAuthentication( HttpServletRequest request,
-    HttpServletResponse response, FilterChain filterChain, Authentication authentication ) throws IOException, ServletException {
-        
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request,
+    HttpServletResponse response, FilterChain filterChain, Authentication authentication) throws IOException, ServletException
+    {
         UserSpringSecurity userSpringSecurity = (UserSpringSecurity) authentication.getPrincipal(); 
         String username = userSpringSecurity.getUsername();
-        String token = this.jwtUtil.generateToken( username );
-        response.addHeader("Authorization", "Bearer " + token );
+        String token = this.jwtUtil.generateToken(username);
+        response.addHeader("Authorization", "Bearer " + token);
         response.addHeader("access-control-expose-headers", "Authorization");
     }
-    
-
-    
     
 }
