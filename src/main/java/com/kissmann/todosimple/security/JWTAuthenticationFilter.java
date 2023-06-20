@@ -1,5 +1,6 @@
 package com.kissmann.todosimple.security;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.FilterChain;
@@ -16,8 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kissmann.todosimple.exceptions.GlobalExceptionHandler;
 import com.kissmann.todosimple.models.User;
-
-import io.jsonwebtoken.io.IOException;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
@@ -44,9 +43,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return authentication;
         }
-        catch( Exception e )
+        catch( IOException e )
         {
-            throw new RuntimeException();
+            throw new RuntimeException( e );
         }
     }
 
