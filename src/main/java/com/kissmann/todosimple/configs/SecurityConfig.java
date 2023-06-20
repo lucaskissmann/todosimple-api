@@ -47,7 +47,7 @@ public class SecurityConfig {
         
         this.authenticationManager = authenticationManagerBuilder.build();
 
-        http.authorizeRequests().antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll().antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll().antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated().and().authenticationManager(authenticationManager);
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
