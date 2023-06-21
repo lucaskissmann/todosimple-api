@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,9 +36,9 @@ public class TaskController {
         return ResponseEntity.ok().body( task );
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Task>> getAllByUserId( @PathVariable Long userId ){
-        List<Task> tasks = this.taskService.getAllByUserId( userId );
+    @GetMapping("/user")
+    public ResponseEntity<List<Task>> getAllByUser(){
+        List<Task> tasks = this.taskService.getAllByUser();
         return ResponseEntity.ok().body( tasks );
     }
 
@@ -62,6 +63,14 @@ public class TaskController {
     {
         this.taskService.deleteTask( id );
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/all")
+    public ResponseEntity<List<Task>> getAllTasks()
+    {
+        List<Task> tasks = this.taskService.getAllTasks();
+        return ResponseEntity.ok().body( tasks );
     }
 
     
