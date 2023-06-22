@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/task/user/1";
+const url = "http://localhost:8080/task/user";
 
 function hideLoading() {
     document.getElementById("loading").style.display = "none";

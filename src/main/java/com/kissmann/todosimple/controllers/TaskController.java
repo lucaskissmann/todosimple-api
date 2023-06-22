@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.kissmann.todosimple.models.Task;
+import com.kissmann.todosimple.models.projection.TaskProjection;
 import com.kissmann.todosimple.services.TaskService;
 
 @RestController
@@ -37,8 +38,8 @@ public class TaskController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<Task>> getAllByUser(){
-        List<Task> tasks = this.taskService.getAllByUser();
+    public ResponseEntity<List<TaskProjection>> getAllByUser(){
+        List<TaskProjection> tasks = this.taskService.getAllByUser();
         return ResponseEntity.ok().body( tasks );
     }
 
